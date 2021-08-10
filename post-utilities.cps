@@ -65,5 +65,9 @@
   _.isDate     = objStringChecker("Date");
   _.isArray    = Array.isArray || objStringChecker("Array");
 
+  _.ensureArray = function (obj) {
+    return _.isArray(obj) ? obj : [obj],
+  };
+
   global._ = _;
 }(this));
