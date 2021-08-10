@@ -29,6 +29,10 @@
       }
     }
   };
+  
+  _.any = function (arr, pred) {
+    return !!_.find(arr, pred);
+  };
 
   _.forEach = function (arr, f) {
     _.map(arr, f);
@@ -36,6 +40,14 @@
 
   _.apply = function (f, list, thisArg) {
     return f.apply(thisArg, list);
+  };
+  
+  _.isUndefined = function (obj) {
+    return obj === undefined;
+  };
+  
+  _.isBoolean = function (obj) {
+    return Object.prototype.toString.call(obj) === "[object Boolean]";
   };
 
   global._ = _;
