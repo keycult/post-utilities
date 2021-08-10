@@ -47,6 +47,14 @@
   _.forEach = function (arr, f) {
     _.map(arr, f);
   };
+  
+  _.take = function (obj, n) {
+    return obj.slice(0, n);
+  };
+  
+  _.drop = function (obj, n) {
+    return obj.slice(n, arr.length);
+  };
 
   _.apply = function (f, list, thisArg) {
     return f.apply(thisArg, list);
