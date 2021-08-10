@@ -1,11 +1,19 @@
 !(function (global) {
   var _ = {};
+  
+  var getElement = (objOrFunction, i) {
+    if (_.isFunction(objOrFunction)) {
+      return objOrFunction(i);
+    } else {
+      return objOrFunction[i];
+    }
+  };
 
   _.map = function (arr, f) {
     arr = arr || [];
     var result = [];
     for (var i = 0; i < arr.length; i++) {
-      result.push(f(arr[i], i));
+      result.push(f(getElement(arr, i), i));
     }
     return result;
   };
@@ -14,8 +22,9 @@
     arr = arr || [];
     var result = [];
     for (var i = 0; i < arr.length; i++) {
-      if (pred(arr[i], i)) {
-        result.push(arr[i]);
+      var element = getElement(arr, i);
+      if (pred(element, i)) {
+        result.push(element);
       }
     }
     return result;
@@ -24,8 +33,9 @@
   _.find = function (arr, pred) {
     arr = arr || [];
     for (var i = 0; i < arr.length; i++) {
-      if (pred(arr[i], i)) {
-        return arr[i];
+      var element = getElement(arr, i);
+      if (pred(element, i)) {
+        return element;
       }
     }
   };
@@ -42,13 +52,18 @@
     return f.apply(thisArg, list);
   };
   
-  _.isUndefined = function (obj) {
-    return obj === undefined;
+  var objStringChecker = function (s) {
+    return function (obj) {
+      return Object.prototype.toString.call(obj) === "[object " + s + "]";
+    };
   };
   
-  _.isBoolean = function (obj) {
-    return Object.prototype.toString.call(obj) === "[object Boolean]";
-  };
+  _.isBoolean  = objStringChecker("Boolean");
+  _.isFunction = objStringChecker("Function");
+  _.isString   = objStringChecker("String");
+  _.isNumber   = objStringChecker("Number");
+  _.isDate     = objStringChecker("Date");
+  _.isArray    = Array.isArray || objStringChecker("Array");
 
   global._ = _;
 }(this));
