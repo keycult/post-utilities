@@ -1,7 +1,7 @@
 !(function (global) {
   var _ = {};
   
-  var getElement = (objOrFunction, i) {
+  var getElement = function (objOrFunction, i) {
     if (_.isFunction(objOrFunction)) {
       return objOrFunction(i);
     } else {
@@ -74,7 +74,7 @@
   _.isArray    = Array.isArray || objStringChecker("Array");
 
   _.ensureArray = function (obj) {
-    return _.isArray(obj) ? obj : [obj],
+    return _.isArray(obj) ? obj : [obj];
   };
 
   global._ = _;
