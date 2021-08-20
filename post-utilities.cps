@@ -1,19 +1,13 @@
 !(function (global) {
   var _ = {};
-  
-  var getElement = function (objOrFunction, i) {
-    if (_.isFunction(objOrFunction)) {
-      return objOrFunction(i);
-    } else {
-      return objOrFunction[i];
-    }
-  };
+
+  /* General JavaScript Utilities */
 
   _.map = function (arr, f) {
     arr = arr || [];
     var result = [];
     for (var i = 0; i < arr.length; i++) {
-      result.push(f(getElement(arr, i), i));
+      result.push(f(arr[i], i));
     }
     return result;
   };
@@ -22,7 +16,7 @@
     arr = arr || [];
     var result = [];
     for (var i = 0; i < arr.length; i++) {
-      var element = getElement(arr, i);
+      var element = arr[i];
       if (pred(element, i)) {
         result.push(element);
       }
@@ -33,7 +27,7 @@
   _.find = function (arr, pred) {
     arr = arr || [];
     for (var i = 0; i < arr.length; i++) {
-      var element = getElement(arr, i);
+      var element = arr[i];
       if (pred(element, i)) {
         return element;
       }
@@ -42,6 +36,10 @@
   
   _.any = function (arr, pred) {
     return !!_.find(arr, pred);
+  };
+
+  _.every = function (arr, pred) {
+    return arr.length === _.filter(arr, pred).length;
   };
 
   _.forEach = function (arr, f) {
@@ -73,9 +71,50 @@
   _.isDate     = objStringChecker("Date");
   _.isArray    = Array.isArray || objStringChecker("Array");
 
+  _.isEqual = function (o1, o2) {
+    return o1 === o2;
+  };
+
   _.ensureArray = function (obj) {
     return _.isArray(obj) ? obj : [obj];
   };
+
+  _.memoize = function (f) {
+    var cache = {};
+
+    return function (key) {
+      var address = '' + key;
+
+      if (!cache.hasOwnProperty(address)) {
+        cache[address] = f(key);
+      }
+
+      return cache[address];
+    }
+  }
+
+  /* Post API Utilities */
+
+  _.allSections = _.memoize(function () {
+    var result = [];
+
+    for (var i = 0; i < global.getNumberOfSections(); i++) {
+      result.push(global.getSection(i));
+    }
+
+    return result;
+  });
+
+  _.allTools = _.memoize(function () {
+    var result = [];
+    var tools = global.getToolTable();
+
+    for (var i = 0; i < tools.getNumberOfTools(); i++) {
+      result.push(tools.getTool(i));
+    }
+
+    return result;
+  });
 
   global._ = _;
 }(this));
